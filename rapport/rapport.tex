@@ -257,7 +257,9 @@ We consider the steady equations ($\frac{\partial \vb{v}}{\partial t}
 prescribe boundary conditions on $\partial \Omega$. Finite volumes are
 a way to approximate solutions of the PDEs, by computing their values
 on elements of a mesh : we assume the domain $\Omega$ to be subdivised
-in elements $K \in \mathcal{M}_\Omega$, called control volumes.
+in elements $K \in \mathcal{M}_\Omega$, called control
+volumes. Fields will be discretised as piecewise constant functions on
+the subdivision.
 
 In this section, boundary conditions are taken to be homogeneous
 Dirichlet conditions to simplify the presentation. Other boundary
@@ -304,12 +306,56 @@ TODO
 Principe de la discr\'etisation : imposer un contr\^ole pour utiliser des
 arguments de compacit\'e : consistent et stable
 \subsubsection{Stabilisation}
-TODO Tel quel : pas inversible, modes oscillants de pression. Ajout de
-la stabilisation : expliquer comment. M\'ethode de clusters. Figure de
-macro.fig.
+Once discretised, the problem is iteratively linearised and solved
+(see next section on Newton method). However, as it is, our problem is
+ill-posed. Firstly, pressure is determined only up to a constant. When
+there are no boundary conditions imposing pressure, this is adressed
+by adding an equation, for instance by fixing the pressure at a
+particular cell.
 
-Explication : pas d'influence de $p_k$ sur l'eq pour la maille k, donc
-checkeboard modes. Remède : fausse diffusion dans conservation de la masse
+Less obvious however is the fact that our discretisation leaves
+another degree of freedom in the pressure field. This has to do with
+how pressure is introduced in the equations. Let us consider the case
+of a 1D problem with constant stepsize $\Delta x$ : the discretisation
+of the term $\nabla p$ in the momentum conservation equation for cell
+$i$ takes the form $\frac{p_{i+1} - p_{i-1}}{2 \Delta x}$. This means
+that the vector with pressure component $1$ on even cells and $-1$ on
+odd cells (called ``checkerboard mode'' because of its aspect for 2D
+grids) belongs to the kernel of the linear operator : the linear
+system is not invertible, and solutions are determined up to a
+checkerboard mode.
+
+This problem is inherent in collocated grids, and is present for any
+meshing in any dimension, because the expression for the pressure
+gradient at a cell does not involve the pressure at this cell, as can
+be seen in equation TODO, using the fact that $\sum m_\sigma n_\sigma
+= 0$. On staggered grids however, where velocity variables are
+stored at cell edges, the pressure gradient is computed on an edge,
+and the resulting expression involves two consecutive pressure
+variables.
+
+Many solutions have been proposed for this problem. The guiding
+principle is to restore in the discretisation of $\nabla p$ a
+dependance of the pressure at the same cell it is computed on. Brezzi
+and Pitk{\"a}ranta proposed in \cite{brezzip} to add an artificial
+diffusion by adding $\lambda \Delta p$ to the mass conservation
+equation. This term is discretised like $\Delta \vb{v}$. $\lambda$
+must be chosen small so as to avoid artificial diffusion, but large
+enough to be able to invert the linear system. This has the
+inconvenient of introducing non-physical mass redistribution on the
+domain.
+
+To alleviate this, R. Eymard and E. Ch\'enier \cite{che-06-num}
+suggested to restrict mass redistribution to small groups of cells
+(around four or five), called clusters. Inside these clusters,
+diffusion is applied, but between them there is none. This corresponds
+to setting $\lambda_\sigma = \lambda$ if $\sigma$ is inside a cluster,
+$\lambda_\sigma = 0$ if $\sigma$ is between two clusters. By doing so,
+mass redistribution only takes place inside a small cluster, whose size
+goes to zero as the mesh is refined, and the method can be proven to
+converge (see \cite{eym-07-sta}).
+
+TODO figure de macro.fig.
 \subsection{Newton method}
 At the core of the algorithm is the solution of a nonlinear system of
 size equal to the number of cells. We use the standard Newton
@@ -440,12 +486,6 @@ TODO intro benchmark, free convection
 \subsection{Physical setup}
 TODO sch\'ema
 \subsection{Boundary conditions}
-TODO LB/GB, pression en haut ...
-
-Pour GB : soit transitoire, soit méthode de Newton à plusieurs
-étages. Pour Newton à plusieurs étages : marche à condition que
-l'initial guess sur le débit soit pas trop mauvais (50 : OK, 0 :
-KO). Point fixe : KO
 \section{Numerical experiments}
 \subsection{Methodology}
 TODO param\`etres fixes \& variables
@@ -519,6 +559,16 @@ TODO rapport avec benchmark, lequere. comparer les courbes
   \end{tabular}
   \caption{Mass flux for different boundary conditions}
 \end{table}
+
+We examine three variations in boundary conditions.
+
+TODO LB/GB, pression en haut ...
+
+Pour GB : soit transitoire, soit méthode de Newton à plusieurs
+étages. Pour Newton à plusieurs étages : marche à condition que
+l'initial guess sur le débit soit pas trop mauvais (50 : OK, 0 :
+KO). Point fixe : KO
+
 \subsection{Chimney in a larger box}
 TODO essayer le code de E. Chénier, changer les CL (boite
 ouverte). Comparer les CL de la boite restreinte avec les résultats de
