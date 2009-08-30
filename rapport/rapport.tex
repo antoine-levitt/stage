@@ -335,11 +335,12 @@ test functions $v$ are chosen in the space of piecewise constant
 functions over the mesh. This is not a subspace of the space in which
 the solution is searched, since piecewise constant functions have no
 gradient : it is a non-conforming finite element method. One advantage
-of this method over finite element methods is that equations
-(\ref{TODO}) have an obvious physical meaning : they express
-conservation laws on a control volume $K$. This method is also simpler
-because the approximation is piecewise constant, which makes it easier
-if other physical effects are to be taken into account.
+of this method over finite element methods is that the equations
+satisfied by the solution of the system have a physical meaning : they
+express discrete conservation laws on the control volumes. This method
+also has the advantage that the solution is piecewise constant, which
+makes it easier if other physical effects are to be taken into
+account.
 
 Our problem is now to choose suitable interpolation methods for the
 integrals.
