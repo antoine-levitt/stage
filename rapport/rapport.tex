@@ -339,25 +339,40 @@ integrals.
 The fluxes $\mathcal F_{KL}$ , $\mathcal G_{KL}$ and $\mathcal H_{KL}$
 have to be discretised for piecewise constant functions. The simplest
 approach is to use a linear interpolation. The discretisation of first
-order terms is straightforward by defining edge values for the fields
-: $$\varphi_{KL} = \frac{\varphi_{K} + \varphi_{L}}{2}.$$
-For Laplacians, whose finite volume formulation require the
-discretisation of edge gradients, we define $$(\nabla \varphi)_{KL} =
-\frac{\varphi_{K} - \varphi_{L}}{d_{KL}},$$ where $d_{KL}$ is the
-distance between volume centers $x_{K}$ and $x_{L}$.
+order terms is straightforward by defining edge values for the
+fields. For $\varphi = p$, $T$ or $\vb{v_{i}}$, $i = 1 \dots d$, we
+define : $$\varphi_{KL} = \frac{\varphi_{K} + \varphi_{L}}{2}.$$ For
+Laplacians, whose finite volume formulation require the discretisation
+of edge gradients, we define $$(\nabla \varphi)_{KL} =
+\frac{(\varphi_{K} - \varphi_{L}) (\vb{x}_{K} - \vb{x_{L}})}
+{{d_{KL}}^{2}},$$ where $d_{KL}$ is the distance between volume
+centers $\vb{x}_{K}$ and $\vb{x}_{L}$.
 
 Alternatively, we can ponderate these expression, by
 defining $$\varphi_{KL} = \frac{d_{K\sigma} \ \varphi_{K} +
   d_{L\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
   \sigma}$ is the distance between the volume center $x_{K}$ and the
-interface $\sigma_{KL}$. The discrete gradient is also defined
-accordingly.
+interface $\sigma_{KL}$. \footnote{TODO : et le gradient ?}
 
 We can now write discrete versions of fluxes $\mathcal F$, $\mathcal
-G$ and $\mathcal H$.
+G$ and $\mathcal H$. We shall here require a geometric condition on the
+meshing, namely that  $(\vb{x}_{K} - \vb{x_{L}})$ is orthogonal to the
+edge, that is, parallel to $\vb{n}_{KL}$. The discrete fluxes then write :
 
-Principe de la discr\'etisation : imposer un contr\^ole pour utiliser des
-arguments de compacit\'e : consistent et stable
+\begin{align}
+  \tilde{\mathcal{F}}_{KL} &= m_{KL} \vb{v}_{KL} \cdot \vb{n}_{KL}\\
+  \tilde{\mathcal{G}}_{KL} &= \tilde{\mathcal F}_{KL} \frac{\vb{v}_{K} + \vb{v}_{L}}{2}
+  + m_{KL} p_{KL} \vb{n}_{KL}
+  - Pr  \ m_{KL} (\nabla \vb{v})_{KL} \vb{n}_{KL}\\
+  \tilde{\mathcal{H}}_{KL} &= \tilde{\mathcal F}_{KL} \frac{T_{K} + T_{L}} {2}
+  - m_{KL} (\nabla T)_{KL} \cdot \vb{n}_{KL}
+\end{align}
+
+These equations are the simple application of our interpolations,
+except for the non-linear terms, which are centered, instead of being
+interpolated like the others (in which case we would write $\tilde{\mathcal
+F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL} \frac{\vb{v}_{K} +
+  \vb{v}_{L}}{2}$) . \footnote{TODO : pourquoi ?}
 \subsubsection{Stabilisation}
 Once discretised, the problem is iteratively linearised and solved
 (see next section on Newton method). However, as it is, our problem is
