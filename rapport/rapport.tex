@@ -275,47 +275,38 @@ $\partial K$ of each control volume. We then split the integral on the
 different interfaces. We write these equations for interior cells only
 for clarity. For exterior cells, terms corresponding to the boundary
 conditions have to be added. For instance for the mass conservation
-equation :
+equation, we have :
 
 \begin{equation}
   \int_K \nabla \cdot \vb{v} \, dv = \int_{\partial K} \vb v \cdot \vb{ds} =
   \sum_{L \in \mathcal{N}_K} \int_{\sigma_{KL}} \vb{v} \cdot \vb{ds}
 \end{equation}
 
-The finite volume formulation of the mass conservation equation is
-then : for each $K \in \mathcal M_\Omega$,
-\begin{equation}
-  \sum_{L \in \mathcal{N}_K} \mathcal{F}_{KL} = 0,
-\end{equation}
-with the mass flux defined as
-\begin{equation}
-  \mathcal{F}_{KL} = \int_{\sigma_{KL}} \vb{v} \cdot \vb{n}_{KL} \ ds.
-\end{equation}
+The other terms in the equations are treated in the same
+way. Laplacian become gradients integrals, and gradients become values
+integrals. The finite volume formulation of
+(\ref{b-mass}-\ref{b-mom}-\ref{b-ene}) then write : for each $K \in
+\mathcal M_\Omega$,
 
-In the same way, momentum and energy equations are written 
-\begin{equation}
-  \sum_{L \in \mathcal{N}_K} \mathcal{G}_{KL} = 0
-\end{equation}
-and
-\begin{equation}
-  \sum_{L \in \mathcal{N}_K} \mathcal{H}_{KL} = 0,
-\end{equation}
-with the momentum and energy fluxes $\mathcal{G}_{KL}$ and
-$\mathcal{H}_{KL}$ defined as follows :
-\begin{equation}
-  \mathcal{G}_{KL} = \int_{\sigma_{KL}} \left[
+\begin{align}
+  \sum_{L \in \mathcal{N}_K} \mathcal{F}_{KL} &= 0\\
+  \sum_{L \in \mathcal{N}_K} \mathcal{G}_{KL} &= \int_{K} Ra Pr T \vb{e_{z}} \\
+  \sum_{L \in \mathcal{N}_K} \mathcal{H}_{KL} &= 0
+\end{align}
+where the mass, momentum and energy fluxes $\mathcal{F}$,
+$\mathcal{G}$ and $\mathcal{H}$ are defined by :
+\begin{align}
+  \mathcal{F}_{KL} &= \int_{\sigma_{KL}} \vb{v} \cdot \vb{n}_{KL} \ ds \\
+  \mathcal{G}_{KL} &= \int_{\sigma_{KL}} \left[
     (\vb{v} \cdot \vb{n}_{KL}) \vb{v} +
     p \vb{n}_{KL} -
-    Pr \nabla \vb{v} -
-    Ra Pr \nabla T \cdot \vb{n}_{KL}
-    \right] ds,
-\end{equation}
-\begin{equation}
-  \mathcal{H}_{KL} = \int_{\sigma_{KL}} \left[
+    Pr \nabla \vb{v} \ \vb{n}_{KL}
+  \right] ds \\
+  \mathcal{H}_{KL} &= \int_{\sigma_{KL}} \left[
     (\vb v \cdot \vb{n}_{KL}) T -
     \nabla T \cdot \vb{n}_{KL}
-    \right] ds.
-\end{equation}
+    \right] ds
+\end{align}
 
 Note that no discretisation is done at this point. The discretisation
 step consists in keeping only the values of the variables at cell
@@ -345,7 +336,26 @@ account.
 Our problem is now to choose suitable interpolation methods for the
 integrals.
 \subsubsection{Discretisation}
-TODO
+The fluxes $\mathcal F_{KL}$ , $\mathcal G_{KL}$ and $\mathcal H_{KL}$
+have to be discretised for piecewise constant functions. The simplest
+approach is to use a linear interpolation. The discretisation of first
+order terms is straightforward by defining edge values for the fields
+: $$\varphi_{KL} = \frac{\varphi_{K} + \varphi_{L}}{2}.$$
+For Laplacians, whose finite volume formulation require the
+discretisation of edge gradients, we define $$(\nabla \varphi)_{KL} =
+\frac{\varphi_{K} - \varphi_{L}}{d_{KL}},$$ where $d_{KL}$ is the
+distance between volume centers $x_{K}$ and $x_{L}$.
+
+Alternatively, we can ponderate these expression, by
+defining $$\varphi_{KL} = \frac{d_{K\sigma} \ \varphi_{K} +
+  d_{L\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
+  \sigma}$ is the distance between the volume center $x_{K}$ and the
+interface $\sigma_{KL}$. The discrete gradient is also defined
+accordingly.
+
+We can now write discrete versions of fluxes $\mathcal F$, $\mathcal
+G$ and $\mathcal H$.
+
 Principe de la discr\'etisation : imposer un contr\^ole pour utiliser des
 arguments de compacit\'e : consistent et stable
 \subsubsection{Stabilisation}
