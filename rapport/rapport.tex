@@ -598,23 +598,49 @@ getting out at the top left.
 \end{figure}
 
 \subsection{Boundary conditions}
+To simulate this setup, we have to prescribe boundary
+conditions. There are two main types : walls and open
+boundaries. Walls are treated by imposing continuity of velocities ($U
+= V = 0$), and a thermal flux (nonzero for the heated wall, zero
+otherwise). Open boundaries are treated by Neumann boundary
+conditions, to reflect the idea that if the domain was infinite,
+velocities would become constant. Incoming air is cold ($T = 0$), and
+outgoing air goes away at constant temperature ($T_{y} = 0$). Pressure
+conditions are more difficult to get right. For open boundaries, it is
+based on Bernoulli's equation. \footnote{TODO : hypoth\`ese
+  irrotationel ? Si non, quoi ?}.
+
+Boundary conditions are summarised in table \ref{table:bc}. We examine
+three main variations on these.
+
+\begin{itemize}
+  \item We expect horizontal velocity to be zero at the bottom. To
+    ensure this, we can impose $U = 0$ instead of $U_{y} = 0$.
+  \item Separating incoming and outgoing fluid seems artificial. Some
+    authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
+    not $V > 0$.
+  \item TODO local versus global
+\end{itemize}
+
+The effect of these boundary conditions will be examined section \ref{effect-bc}
+
 \begin{table}[!h]
   \centering
   \begin{tabular}{|l|c|c|c|c|}
     \hline
-    & U & V & P & T \\
+    Domain & U & V & P & T \\
     \hline
     Wall         & $U = 0$     & $V = 0$     & $P_{x} = 0$             & $T_{x} = 0$ \\
     Heated Wall  & $U = 0$     & $V = 0$     & $P_{x} = 0$             & $T_{x} = 1$ \\
-    \hline
-    In           & $U_{x} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2}$  & $T = 0$     \\
-    Out, $V < 0$ & $U_{x} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2} $ & $T = 0$     \\
-    Out, $V > 0$ & $U_{x} = 0$ & $V_{y} = 0$ & $P = 0$                 & $T_y = 0$   \\
+%    \hline
+    Inlet           & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2}$  & $T = 0$     \\
+    Outlet, $V < 0$ & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2} $ & $T = 0$     \\
+    Outlet, $V > 0$ & $U_{y} = 0$ & $V_{y} = 0$ & $P = 0$                 & $T_y = 0$   \\
     \hline
   \end{tabular}
   \caption{Boundary conditions. See text for details.}
+  \label{table:bc}
 \end{table}
-
 \section{Numerical experiments}
 \subsection{Methodology}
 TODO param\`etres fixes \& variables
@@ -675,6 +701,7 @@ mailles, macromailles = 1
 \label{fig:lambdas}
 \end{figure}
 \subsection{Effects of different boundary conditions}
+\label{effect-bc}
 TODO rapport avec benchmark, lequere. comparer les courbes
 \begin{table}[!h]
   \centering
