@@ -417,11 +417,11 @@ This problem is inherent in collocated grids, and is present in a form
 or another for any meshing, in any dimension, with any boundary
 conditions, because the expression for the pressure gradient at a cell
 does not involve the pressure at this cell, as can be seen in equation
-(\ref{discr-2}), using the fact that $\sum_{L \in \mathcal N _{K}} m_\sigma \vb{n}_\sigma =
-\vb{0}$. On staggered grids however, where velocity variables are
-stored at cell edges, the pressure gradient is computed on an edge,
-and the resulting expression involves two consecutive pressure
-variables.
+(\ref{discr-2}), using the fact that $\sum_{L \in \mathcal N _{K}}
+m_\sigma \vb{n}_\sigma = \vb{0}$. On staggered grids however, where
+velocity variables are stored at cell edges, the pressure gradient is
+computed on an edge, and the resulting expression involves two
+consecutive pressure variables.
 
 Many solutions have been proposed for this problem. The guiding
 principle is to restore in the discretisation of $\nabla p$ a
