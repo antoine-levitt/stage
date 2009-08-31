@@ -373,13 +373,33 @@ except for the non-linear terms, which are centered, instead of being
 interpolated like the others (in which case we would write $\tilde{\mathcal
 F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL} \frac{\vb{v}_{K} +
   \vb{v}_{L}}{2}$) . \footnote{TODO : pourquoi ?}
-\subsubsection{Stabilisation}
-Once discretised, the problem is iteratively linearised and solved
+
+The discrete equations we solve are then : for each $K \in \mathcal
+M_{\Omega}$, 
+\begin{align}
+  \label{discr-1}
+  \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{F}}_{KL} &= 0\\
+  \label{discr-2}
+  \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{G}}_{KL} &= Ra Pr T_{K} m_K \vb{e_{z}}\\
+  \label{discr-3}
+  \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{H}}_{KL} &= 0
+\end{align}
+
+For $n$ control volumes, there are $(d+2)n$ nonlinear equations in the
+$(d+2)n$ unknowns $(\vb{v}_{K}, T_{K}, p_{K})_{K \in \mathcal
+  M_{\Omega}}$. Once discretised, the problem is iteratively linearised and solved
 (see next section on Newton method). However, as it is, our problem is
-ill-posed. Firstly, pressure is determined only up to a constant. When
-there are no boundary conditions imposing pressure, this is adressed
-by adding an equation, for instance by fixing the pressure at a
-particular cell.
+ill-posed and needs stabilisation to produce a solution.
+
+\subsubsection{Stabilisation}
+First, without Dirichlet boundary conditions for pressure, it is
+determined only up to a constant. This is because pressure only
+appears through its gradient in the continuous equation
+(\ref{b-mom}). In the discrete system, we have $\sum_{L \in
+  \mathcal{N}_{K}} m_{KL} \vb{n}_{KL} = \vb{0}$, which shows that
+equation (\ref{discr-2}) is not modified by adding a constant to the
+pressure field. This is adressed by adding an equation, for instance
+by fixing the pressure at a particular cell.
 
 Less obvious however is the fact that our discretisation leaves
 another degree of freedom in the pressure field. This has to do with
@@ -393,11 +413,12 @@ grids) belongs to the kernel of the linear operator : the linear
 system is not invertible, and solutions are determined up to a
 checkerboard mode.
 
-This problem is inherent in collocated grids, and is present for any
-meshing in any dimension, because the expression for the pressure
-gradient at a cell does not involve the pressure at this cell, as can
-be seen in equation TODO, using the fact that $\sum m_\sigma n_\sigma
-= 0$. On staggered grids however, where velocity variables are
+This problem is inherent in collocated grids, and is present in a form
+or another for any meshing, in any dimension, with any boundary
+conditions, because the expression for the pressure gradient at a cell
+does not involve the pressure at this cell, as can be seen in equation
+(\ref{discr-2}), using the fact that $\sum_{L \in \mathcal N _{K}} m_\sigma \vb{n}_\sigma =
+\vb{0}$. On staggered grids however, where velocity variables are
 stored at cell edges, the pressure gradient is computed on an edge,
 and the resulting expression involves two consecutive pressure
 variables.
@@ -422,8 +443,6 @@ $\lambda_\sigma = 0$ if $\sigma$ is between two clusters. By doing so,
 mass redistribution only takes place inside a small cluster, whose size
 goes to zero as the mesh is refined, and the method can be proven to
 converge (see \cite{eym-07-sta}).
-
-TODO figure de macro.fig.
 \subsection{Newton method}
 At the core of the algorithm is the solution of a nonlinear system of
 size equal to the number of cells. We use the standard Newton
