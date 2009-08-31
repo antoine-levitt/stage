@@ -682,7 +682,8 @@ solvers are very sensitive to conditioning and can not be used on
 ill-conditioned matrices. For our problem, the iterative solver does
 not converge unless $\lambda > 10^{-6}$. Further increasing $\lambda$
 reduces the number of iterations needed for the iterative solver,
-until it reaches a plateau around $10^{-4}$.
+until it reaches a plateau around $10^{-4}$. For large values of
+$\lambda$, the iterative solver fails again.
 
 Even ignoring conditioning, choosing an appropriate $\lambda$ is no
 easy task. Figure \ref{fig:lambdas} shows the pressure at mid-width
@@ -692,13 +693,25 @@ $\lambda$ increases, clusters (here, of two cells) appear, until a
 stage around $10^{-4}$ where pressure becomes constant inside the
 clusters.
 
-TODO : comparaison avec Brezzi-Pitkaranta, clusters centrés sur les
-mailles, macromailles = 1
 \begin{figure}[htb]
 \centering
 \includegraphics{figs/lambdas}
-\caption{Pressure at mid-width.}
+\caption{Pressure at mid-width, cluster method (zoom).}
 \label{fig:lambdas}
+\end{figure}
+
+On the other hand, the Brezzi-Pitk\"aranta method (without clusters)
+produces much smoother curves, as can be seen figure
+\ref{fig:bps}. However, for high stabilisation, the solution
+noticeably changes, while that was not the case with the cluster
+method clusters method. Generally, clusters tend to limit the impact
+of stabilisation, and avoid too much variation from the true field.
+
+\begin{figure}[htb]
+\centering
+\includegraphics{figs/bps}
+\caption{Pressure at mid-width, Brezzi-Pitk\"aranta method (zoom).}
+\label{fig:bps}
 \end{figure}
 \subsection{Effects of different boundary conditions}
 \label{effect-bc}

@@ -1,7 +1,6 @@
 set terminal postscript eps color
 set output 'lambdas.eps'
 set size 1.0, .8
-set title "Pressure at mid-width for different lambdas (zoom)"
 set xlabel "y"
 set ylabel "Pressure"
 set xrange [2.35:2.65]
