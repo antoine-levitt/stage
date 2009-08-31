@@ -466,7 +466,7 @@ is carried out until convergence. We stop the iterations when both the
 increment $||x_{n} - x_{n-1}||_\infty$ and the residual
 $||f(x_n)||_\infty$ are lower than $\varepsilon =
 10^{-10}$. Theoretically, this method is known to converge
-quadratically when $x_0$ is close to the solution. In our problem,
+quadratically when $x_0$ is close enough to the solution. In our problem,
 since no approximation of the solution is available, we simply use
 $x_0 = 0$, and the algorithm is numerically found to converge (see
 section \ref{sec:conv_newton} for details).
@@ -509,10 +509,15 @@ forward Euler, backward Euler, and the trapezoidal rule. The problem
 is to approximate a solution of $x'(t) = f(x(t))$, $x(0) =
 x_0$. Using a timestep $h$, the three methods
 are, with $x^i$ as an approximation of $x(i h)$ :
-TODO : typesetting
-$$x^{i+1} = x^i + h f(x^i)$$
-$$x^{i+1} = x^i + h f(x^{i+1})$$
-$$x^{i+1} = x^i + h \frac{f(x^i) + f(x^{i+1})}{2}$$
+\begin{align}
+  \label{fe}
+  x^{i+1} &= x^i + h f(x^i) & \text{Forward Euler}\\
+  \label{be}
+  x^{i+1} &= x^i + h f(x^{i+1}) & \text{Backward Euler}\\
+  \label{tr}
+  x^{i+1} &= x^{i+1} = x^i + h \frac{f(x^i) + f(x^{i+1})}{2}&
+  \text{Trapezoidal rule}
+\end{align}
 
 Note that while forward Euler is an explicit method, both backward
 euler and the trapezoidal rule are implicit : at each iteration, an
@@ -539,7 +544,7 @@ and variables.
 
 The implementation of an implicit transient method is quite easy if
 one can already solve stationary problems. Indeed, taking for instance
-backward Euler method, the equation (TODO, ref eq BE) can be rewritten
+backward Euler method, the equation (\ref{be}) can be rewritten
 as
 $$f(x^{i+1}) - \frac{x^{i+1}}{h} + \frac{x^i}{h} = 0.$$
 
