@@ -290,7 +290,8 @@ integrals. The finite volume formulation of
 
 \begin{align}
   \sum_{L \in \mathcal{N}_K} \mathcal{F}_{KL} &= 0\\
-  \sum_{L \in \mathcal{N}_K} \mathcal{G}_{KL} &= \int_{K} Ra Pr T \vb{e_{z}} \\
+  \sum_{L \in \mathcal{N}_K} \mathcal{G}_{KL} - \int_{K} Ra Pr T
+  \vb{e_{z}} &= 0 \\
   \sum_{L \in \mathcal{N}_K} \mathcal{H}_{KL} &= 0
 \end{align}
 where the mass, momentum and energy fluxes $\mathcal{F}$,
@@ -380,7 +381,8 @@ M_{\Omega}$,
   \label{discr-1}
   \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{F}}_{KL} &= 0\\
   \label{discr-2}
-  \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{G}}_{KL} &= Ra Pr T_{K} m_K \vb{e_{z}}\\
+  \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{G}}_{KL} - Ra Pr T_{K}
+  m_K \vb{e_{z}} &= 0\\
   \label{discr-3}
   \sum_{L \in \mathcal{N}_K} \tilde{\mathcal{H}}_{KL} &= 0
 \end{align}
@@ -450,14 +452,16 @@ algorithm : we linearize the problem around an iterate $x_n$, solve
 this linear problem to obtain $x_{n+1}$, and repeat until
 convergence. Denoting by $x$ the unknowns of our problem, i.e. the
 velocities, pressures and temperatures at the cell centers, by $f(x)$
-the left-hand side of (\ref{TODO}), and by $J_f(x)$ the Jacobian
-matrix of $f$ at point $x$, the iteration is given by
+the left-hand side of (\ref{discr-1},\ref{discr-2},\ref{discr-3}), and
+by $J_f(x)$ the Jacobian matrix of $f$ at point $x$, the iteration is
+given by
 \begin{equation}
   \label{eq:newton}
-  J_f(x_n) (x_{n+1} - x_n) = - f(x_n)
+  J_f(x_n) (x_{n+1} - x_n) = - f(x_n).
 \end{equation}
-The Jacobian is obtained by differentiating equation (\ref{TODO}). The
-result is a linear system, wich is solved for $x_{n+1}$. The iteration
+
+The Jacobian is obtained by symbolically differentiating $f$. The
+result is a linear system, which is solved for $x_{n+1}$. The iteration
 is carried out until convergence. We stop the iterations when both the
 increment $||x_{n} - x_{n-1}||_\infty$ and the residual
 $||f(x_n)||_\infty$ are lower than $\varepsilon =
