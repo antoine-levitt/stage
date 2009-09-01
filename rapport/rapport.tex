@@ -100,7 +100,7 @@ finite volume scheme introduced by E. Chénier and R. Eymard
 To test the accuracy of these variants in the context of free
 convection (where fluid flow is only a result of temperature
 gradients), G. Desrayaud organised a benchmark in 2007, around a
-simple problem. TODO : qu'est ce qu'on en fait, décrire les différents
+simple problem. TODOFIN : qu'est ce qu'on en fait, décrire les différents
 codes.
 
 % points \`a mentionner dans l'introduction:
@@ -561,7 +561,7 @@ Transient methods were numerically found to converge to stable
 equilibria corresponding to the solutions computed by stationary
 methods.
 \section{The chimney problem}
-TODO intro benchmark, free convection
+TODOFIN intro benchmark, free convection
 \subsection{Physical setup}
 We are interested in a benchmark problem in free convection. The
 ``chimney'' represented figure \ref{fig:schema} is composed of a
@@ -602,7 +602,7 @@ three main variations on these.
   \item Separating incoming and outgoing fluid seems artificial. Some
     authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
     not $V > 0$.
-  \item TODO local versus global
+  \item \footenote{TODO expliquer local et global}
 \end{itemize}
 
 
@@ -663,11 +663,21 @@ guess on $\Phi$ is not too far off. As an example, for a fixed point
 around $80$, initialising the method with $\Phi_{0} = 0$ did not work,
 $\Phi_{0} = 50$ did.
 
+Both methods, either using a long transient analysis or a two-stage
+Newton method, gave the same result.
+
 \section{Numerical experiments}
 \subsection{Methodology}
-We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$.
-
-TODO param\`etres fixes \& variables
+We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$. Unless specified
+otherwise, boundary conditions are those of table \ref{table:bc}, and
+the solver is stationary. The meshing is rectangular, with smaller
+cells around zones of interest, i.e. $y = 0$, $x = 2.5$ and $x =
+7.5$. The default grid is 50x300. Clusters are groups of 2x2 cells,
+with $\lambda = 10^{-5}$. The linear solver uses an iterative
+bi-conjugate gradient algorithm with 5 levels of incomplete LU (ILU)
+preconditioning, except for some problems which require a direct
+solver (see section \ref{sec:stab}). The method was implemented in
+FORTRAN by E. Ch\'enier.
 \subsection{Convergence}
 \subsubsection{Newton convergence}
 \label{sec:conv_newton}
@@ -701,6 +711,7 @@ hours to complete.
 \label{fig:conv-maillage}
 \end{figure}
 \subsection{Influence of stabilisation}
+\label{sec:stab}
 Stabilisation, while introducing numerical errors, is an essential
 part of this method. Without it, there would be trivial solutions of
 the linear equations (checkerboard modes), and the linear system would
@@ -799,7 +810,7 @@ TODO essayer le code de E. Chénier, changer les CL (boite
 ouverte). Comparer les CL de la boite restreinte avec les résultats de
 la grande.
 \section{Conclusion}
-TODO
+TODOFIN
 \listoffigures
 \listoftables
 
