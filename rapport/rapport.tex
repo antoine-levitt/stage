@@ -622,7 +622,15 @@ three main variations on these.
   \item TODO local versus global
 \end{itemize}
 
-The effect of these boundary conditions will be examined section \ref{effect-bc}
+The effect of these boundary conditions will be examined section
+\ref{effect-bc}
+
+
+Pour GB : soit transitoire, soit méthode de Newton à plusieurs
+étages. Pour Newton à plusieurs étages : marche à condition que
+l'initial guess sur le débit soit pas trop mauvais (50 : OK, 0 :
+KO). Point fixe : KO
+
 
 \begin{table}[!h]
   \centering
@@ -643,6 +651,8 @@ The effect of these boundary conditions will be examined section \ref{effect-bc}
 \end{table}
 \section{Numerical experiments}
 \subsection{Methodology}
+We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$.
+
 TODO param\`etres fixes \& variables
 \subsection{Convergence}
 \subsubsection{Newton convergence}
@@ -729,29 +739,47 @@ of stabilisation, and avoid too much variation from the true field.
 \end{figure}
 \subsection{Effects of different boundary conditions}
 \label{effect-bc}
-TODO rapport avec benchmark, lequere. comparer les courbes
+We examine the quantitive effect of the three variations described
+above. Table \ref{table:debits} shows total mass flux
+($\int_{\text{inlet}} \vb{v} \cdot \vb{n} ds = \int_{\text{outlet}}
+\vb{v} \cdot \vb{n} ds$, since $\nabla \cdot \vb v = 0$) with the
+three variations we describe.
+
+
 \begin{table}[!h]
   \centering
   \begin{tabular}{|l|c|c|c|c|}
     \hline
     & LB Bench & LB Lequere & GB Bench & GB Lequere \\
     \hline
-    Cl U Neumann & 72.93 & 58.57 & 85.50 & 76.99\\
-    Cl U Dirichlet & 73.23 & 59.08 & 85.51 & 77.00 \\
+    $U = 0$ & 72.93 & 58.57 & 85.50 & 76.99\\
+    $U_{x} = 0$ & 73.23 & 59.08 & 85.51 & 77.00 \\
     \hline
   \end{tabular}
   \caption{Mass flux for different boundary conditions}
+  \label{table:debits}
 \end{table}
 
-We examine three variations in boundary conditions.
 
-TODO LB/GB, pression en haut ...
+First of all, the results are sensibly equal when $U = 0$ and when
+$U_{x} = 0$. Indeed, the only difference is that horizontal velocity
+is not exactly zero when using $U_{x} = 0$, but it does not noticeably
+modify the results.
 
-Pour GB : soit transitoire, soit méthode de Newton à plusieurs
-étages. Pour Newton à plusieurs étages : marche à condition que
-l'initial guess sur le débit soit pas trop mauvais (50 : OK, 0 :
-KO). Point fixe : KO
+Using local or global boundary conditions for the inlet considerably
+changes the mass flux, with higher fluxes for global Bernoulli. An
+heuristic argument to explain this effect is as follows : global
+Bernoulli, by increasing mean pressure, leads to higher vertical
+velocities at the inlet. Indeed, mean pressure at the inlet using
+global Bernoulli is $- (\int_{\text{inlet}} V)^{2}/2$, and with local
+Bernoulli it is $- (\int_{\text{inlet}} V^{2}) / 2$. A simple
+application of Cauchy-Schwartz inequality shows that mean pressure is
+higher when using global Bernoulli.
 
+When the boundary conditions do not distinguish incoming and outgoing
+fluid, incoming fluid is cold. This means it is evacuated less quickly
+than when incoming air is at constant temperature, and the mass flux
+is lower.
 \subsection{Chimney in a larger box}
 TODO essayer le code de E. Chénier, changer les CL (boite
 ouverte). Comparer les CL de la boite restreinte avec les résultats de
