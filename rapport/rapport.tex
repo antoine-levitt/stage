@@ -69,11 +69,11 @@ All these methods discretize the solution according to a grid. There
 are various choices for the location of the unknowns inside the grid,
 and methods can be split between {\bf collocated} and {\bf staggered}
 grids. In collocated grids, all variables are stored in the cell
-centers of the control volumes. In staggered grids, scalar variables
-are still stored in cell centers, but velocities are located at cell
-faces. The main motivation for using staggered grids is to avoid the
-so-called checkerboard pressure modes that arise from the
-discretization of first derivatives in collocated grids.
+centers. In staggered grids, scalar variables are still stored in cell
+centers, but velocities are located at cell faces. The main motivation
+for using staggered grids is to avoid the so-called checkerboard
+pressure modes that arise from the discretization of first derivatives
+in collocated grids.
 
 Examples of classical schemes on staggered grids include the
 Marker-And-Cell (MAC) scheme
@@ -260,7 +260,7 @@ conditions. Finite volumes are a way to approximate solutions of the
 PDEs, by computing their values on elements of a mesh : fields will be
 discretised as piecewise constant functions on the subdivision. We
 assume the domain $\Omega$ to be subdivised in polygons $K \in
-\mathcal{M}_\Omega$, called control volumes. Each element $K$ is
+\mathcal{M}_\Omega$, called {\bf control volumes} or {\bf cells}. Each element $K$ is
 linked to a set of neighbours $\mathcal{N}_K$ by an interface
 $\sigma_{KL}$, $L \in \mathcal N_K$. The interface is oriented by the
 unit vector $\vb{n}_{KL}$, and has measure (surface in 3D, length in
@@ -283,7 +283,7 @@ equation, we have :
 \end{equation}
 
 The other terms in the equations are treated in the same
-way. Laplacian become gradients integrals, and gradients become values
+way. Laplacians become gradients integrals, and gradients become values
 integrals. The finite volume formulation of
 (\ref{b-mass}-\ref{b-mom}-\ref{b-ene}) then write : for each $K \in
 \mathcal M_\Omega$,
@@ -410,7 +410,7 @@ of a 1D problem with constant stepsize $\Delta x$ : the discretisation
 of the term $\nabla p$ in the momentum conservation equation for cell
 $i$ takes the form $\frac{p_{i+1} - p_{i-1}}{2 \Delta x}$. This means
 that the vector with pressure component $1$ on even cells and $-1$ on
-odd cells (called ``checkerboard mode'' because of its aspect for 2D
+odd cells (called {\bf checkerboard mode} because of its aspect for 2D
 grids) belongs to the kernel of the linear operator : the linear
 system is not invertible, and solutions are determined up to a
 checkerboard mode.
