@@ -320,7 +320,7 @@ the discretisation is performed on fluxes rather than on differential
 operators. This is simpler because one differentiation order is lost :
 Laplacians become gradients integrals. Another advantage is that the
 finite volume method is much more easily generalized to various sorts
-of meshs, and not limited to rectangular ones.
+of meshes, and not limited to rectangular ones.
 
 This method can also be seen as a finite element method, where the
 test functions $v$ are chosen in the space of piecewise constant
@@ -659,9 +659,23 @@ x_{n-1}||_\infty$.
 \end{figure}
 
 \subsubsection{Mesh convergence}
-TODO trouver un crit\`ere : probl\`eme mod\`ele dont la solution est connue
-et trouver l'ordre ? ou alors l'admettre et v\'erifier la convergence
-sur des courbes
+We now examine mesh convergence. That is, will solutions on different
+meshes converge to a unique solution when the maximum measure of cells
+tends to 0 ? We only tried rectangular elements, for which results are
+given figure \ref{fig:conv-maillage}. We plot a particular quantity
+for different number of cells, from 15k to 240k. Results, while
+somewhat varying, stay within a range of 5\% from each other. It is
+difficult to investigate true convergence, since the simulation on the
+finest grid (240k cells) already uses around 2GB of RAM and takes six
+hours to complete.
+
+\begin{figure}[htb]
+\centering
+\includegraphics{figs/conv-maillage}
+\caption{Temperature at mid-width for different meshes (zoom). Maximum
+  relative difference of about 5\%.}
+\label{fig:conv-maillage}
+\end{figure}
 \subsection{Influence of stabilisation}
 Stabilisation, while introducing numerical errors, is an essential
 part of this method. Without it, there would be trivial solutions of
