@@ -502,7 +502,8 @@ $\theta = \delta / ||\Delta x||$, and if not, $\theta = 1$.
 \subsection{Methods for instationary flow}
 This work focuses on the stationary solver. However, certain boundary
 conditions are easier to treat by a transient approach, which we will
-now describe.
+now describe. Transient solver is also an option when the stationary
+solver does not converge.
 
 Let us begin by recalling three simple methods for solving ODEs :
 forward Euler, backward Euler, and the trapezoidal rule. The problem
@@ -556,24 +557,6 @@ its conditioning, since it brings the matrix closer to $\frac{1}{h}
 I$, which has condition number $1$. This speeds up iterative methods
 for the linear system.
 
-The main advantage of transient methods in our context is that one
-can freely mix implicit or explicit schemes for each equation. Thus,
-difficult boundary conditions need not be solved implicitely, which
-would require filling the Jacobian. This is useful for instance for
-non-local boundary conditions which would destroy the block structure
-of the Jacobian.
-
-Our use case is for a boundary condition which reads $p = -
-\frac{1}{2} V^2$, where $V$ is the average velocity on a border of our
-domain. Using a fully implicit scheme (or solving the stationary
-problem) would require the Jacobian to contain non-local entries,
-because the pressure at cell $i$ would depend on velocities on the
-whole border. This would not be compatible with the way matrices are
-implemented in the code without extensive modification. By allowing
-this condition to be explicit, the issue is removed : the $V$ in the
-equation is the one from the last step, which does not require any
-entry in the Jacobian.
-
 Transient methods were numerically found to converge to stable
 equilibria corresponding to the solutions computed by stationary
 methods.
@@ -608,7 +591,7 @@ velocities would become constant. Incoming air is cold ($T = 0$), and
 outgoing air goes away at constant temperature ($T_{y} = 0$). Pressure
 conditions are more difficult to get right. For open boundaries, it is
 based on Bernoulli's equation. \footnote{TODO : hypoth\`ese
-  irrotationel ? Si non, quoi ?}.
+  irrotationel ? Si non, quoi ?}
 
 Boundary conditions are summarised in table \ref{table:bc}. We examine
 three main variations on these.
@@ -621,15 +604,6 @@ three main variations on these.
     not $V > 0$.
   \item TODO local versus global
 \end{itemize}
-
-The effect of these boundary conditions will be examined section
-\ref{effect-bc}
-
-
-Pour GB : soit transitoire, soit méthode de Newton à plusieurs
-étages. Pour Newton à plusieurs étages : marche à condition que
-l'initial guess sur le débit soit pas trop mauvais (50 : OK, 0 :
-KO). Point fixe : KO
 
 
 \begin{table}[!h]
@@ -649,6 +623,46 @@ KO). Point fixe : KO
   \caption{Boundary conditions. See text for details.}
   \label{table:bc}
 \end{table}
+
+
+The effect of these boundary conditions will be examined section
+\ref{effect-bc}. Let us however notice that global boundary conditions
+at the inlet pose an implementation problem. Indeed, it introduces
+non-local entries in the Jacobian, since pressure at cell $i$ depends
+on velocities on the whole border. However, since matrices data
+structures are heavily linked to the mesh structure in the program we
+use, they cannot contain non-local entries without extensive
+modifications of the code, and possibly a massive performance penalty.
+
+There are two ways of dealing with this. First, using the transient
+solver allows us to leave that particular boundary condition explicit,
+while the rest of the simulation is implicit. This means at each step
+using the computed mass flux from the step before for the boundary
+condition, and leaving the corresponding entries in the Jacobian
+blank. This is a mixed explicit-implicit scheme, but was not found to
+cause the instabilities often associated with explicit schemes.
+
+The other way is to consider the mass flux as imposed, and use a fixed
+point method on it. Denoting by $f$ the application that maps a mass
+flux $\Phi$ onto the solution of our problem with as a boundary
+condition on the inlet $p = - \Phi^{2}/2$, and by $g$ the application
+that maps a solution vector to its mass flux, we are interested in
+obtaining a fixed point of $F = g \circ f$ (or $G = f \circ g$. $F$ is
+simpler since it operates on scalars).
+
+The first idea is to use a simple fixed point method : $\Phi_{n+1} =
+F(\Phi_{n})$. This corresponds to fixing a mass flux, computing the
+corresponding solution, computing its mass flux, setting this as the
+reference mass flux, and iterate. However, this method does not
+numerically converge, even if initialised to the correct mass flux,
+presumably because $F$ is not a contraction. However, we can apply
+Newton method (actually, pseudo-Newton, since we do not have any
+information on the derivatives) to $F^{*}(\Phi) = F(\Phi) -
+\Phi$. This is found to converge without problems, if the initial
+guess on $\Phi$ is not too far off. As an example, for a fixed point
+around $80$, initialising the method with $\Phi_{0} = 0$ did not work,
+$\Phi_{0} = 50$ did.
+
 \section{Numerical experiments}
 \subsection{Methodology}
 We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$.
