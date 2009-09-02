@@ -344,23 +344,22 @@ have to be discretised for piecewise constant functions. The simplest
 approach is to use a linear interpolation. The discretisation of first
 order terms is straightforward by defining edge values for the
 fields. For $\varphi = p$, $T$ or $\vb{v_{i}}$, $i = 1 \dots d$, we
-define : $$\varphi_{KL} = \frac{\varphi_{K} + \varphi_{L}}{2}.$$ For
-Laplacians, whose finite volume formulation require the discretisation
-of edge gradients, we define $$(\nabla \varphi)_{KL} =
+define :  $$\varphi_{KL} = \frac{d_{L\sigma} \ \varphi_{K} +
+  d_{K\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
+  \sigma}$ is the distance between the volume center $x_{K}$ and the
+interface $\sigma_{KL}$.
+
+For Laplacians, whose finite volume formulation require the
+discretisation of edge gradients, we define $$(\nabla \varphi)_{KL} =
 \frac{(\varphi_{K} - \varphi_{L}) (\vb{x}_{K} - \vb{x_{L}})}
 {{d_{KL}}^{2}},$$ where $d_{KL}$ is the distance between volume
 centers $\vb{x}_{K}$ and $\vb{x}_{L}$.
 
-Alternatively, we can ponderate these expression, by
-defining $$\varphi_{KL} = \frac{d_{L\sigma} \ \varphi_{K} +
-  d_{K\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
-  \sigma}$ is the distance between the volume center $x_{K}$ and the
-interface $\sigma_{KL}$. \footnote{TODO : et le gradient ?}
-
 We can now write discrete versions of fluxes $\mathcal F$, $\mathcal
-G$ and $\mathcal H$. We shall here require a geometric condition on the
-meshing, namely that  $(\vb{x}_{K} - \vb{x_{L}})$ is orthogonal to the
-edge, that is, parallel to $\vb{n}_{KL}$. The discrete fluxes then write :
+G$ and $\mathcal H$. We shall here require a geometric condition on
+the meshing, namely that $(\vb{x}_{K} - \vb{x_{L}})$ is orthogonal to
+the edge, that is, parallel to $\vb{n}_{KL}$, which simplifies
+expressions. The discrete fluxes then write :
 
 \begin{align}
   \tilde{\mathcal{F}}_{KL} &= m_{KL} \vb{v}_{KL} \cdot \vb{n}_{KL}\\
@@ -374,8 +373,10 @@ edge, that is, parallel to $\vb{n}_{KL}$. The discrete fluxes then write :
 These equations are the simple application of our interpolations,
 except for the non-linear terms, which are centered, instead of being
 interpolated like the others (in which case we would write $\tilde{\mathcal
-F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL} \frac{\vb{v}_{K} +
-  \vb{v}_{L}}{2}$) . \footnote{TODO : pourquoi ?}
+F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL} (\frac{\vb{v}_{K} +
+  \vb{v}_{L}}{2}$) . This is to ensure that discrete forms of kinetic
+energy inequalities can be obtained (for more details, see TODO :
+trouver la ref).
 
 The discrete equations we solve are then : for each $K \in \mathcal
 M_{\Omega}$, 
@@ -431,10 +432,16 @@ Many solutions have been proposed for this problem. The guiding
 principle is to restore in the discretisation of $\nabla p$ a
 dependance of the pressure at the same cell it is computed on. Brezzi
 and Pitk{\"a}ranta proposed in \cite{brezzip} to add an artificial
-diffusion by adding $\lambda \Delta p$ to the mass conservation
-equation. This term is discretised like $\Delta \vb{v}$. $\lambda$
-must be chosen small so as to avoid artificial diffusion, but large
-enough to be able to invert the linear system. This has the
+diffusion by substracting $\lambda \Delta p$ to the mass conservation
+equation. This term is discretised like $\Delta \vb{v}$, and
+consequently we have $$\tilde{\mathcal{F}}_{KL} = m_{KL} \vb{v}_{KL}
+\cdot \vb{n}_{KL} - TODO.$$ Note that $\tilde{\mathcal{G}}$ and
+$\tilde{\mathcal{H}}$ must use this new definition of
+$\tilde{\mathcal{F}}$ in the discretisation of non-linear transport
+terms, again to ensure kinetic energy balance.
+
+$\lambda$ must be chosen small so as to avoid artificial diffusion,
+but large enough to be able to invert the linear system. This has the
 inconvenient of introducing non-physical mass redistribution on the
 domain.
 
@@ -584,16 +591,25 @@ getting out at the top left.
 
 \subsection{Boundary conditions}
 To simulate this setup, we have to prescribe boundary
-conditions. There are two main types : walls and open
-boundaries. Walls are treated by imposing continuity of velocities ($U
-= V = 0$), and a thermal flux (nonzero for the heated wall, zero
-otherwise). Open boundaries are treated by Neumann boundary
-conditions, to reflect the idea that if the domain was infinite,
-velocities would become constant. Incoming air is cold ($T = 0$), and
-outgoing air goes away at constant temperature ($T_{y} = 0$). Pressure
-conditions are more difficult to get right. For open boundaries, it is
-based on Bernoulli's equation. \footnote{TODO : hypoth\`ese
-  irrotationel ? Si non, quoi ?}
+conditions. There are two main types : walls and open boundaries.
+
+Walls are treated by imposing continuity of velocities ($U = V = 0$),
+and a thermal flux (nonzero for the heated wall, zero otherwise). Open
+boundaries are treated by Neumann boundary conditions, to reflect the
+idea that if the domain was infinite, velocities would become
+constant. Incoming air is cold ($T = 0$), and outgoing air goes away
+at constant temperature ($T_{y} = 0$).
+
+Pressure conditions are more difficult to get right. For open
+boundaries, it is based on Bernoulli's theorem. This states that for
+perfect fluids (neglecting the effect of viscosity), along a current
+line (a line that is tangential to the velocity vector at every
+point), $p + \frac{1}{2} \vb{v}^{2}$ is a constant. Assuming the
+domain to be infinite, at infinity we would have $\vb{v} = 0$, $p =
+0$. Bernoulli's theorem then gives $p_{\text inlet} + \frac 1 2 {\vb
+  {v_{\text{inflet}}}}^{2} = p_{\text {infinity}} + \frac 1 2 {\vb
+  {v_{\text{infinity}}}}^{2} = 0$, so $p_{\text{inlet}} = - \frac 1 2
+{\vb v_{\text{inlet}}}^{2}$.
 
 Boundary conditions are summarised in table \ref{table:bc}. We examine
 three main variations on these.
@@ -604,7 +620,9 @@ three main variations on these.
   \item Separating incoming and outgoing fluid seems artificial. Some
     authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
     not $V > 0$.
-  \item \footenote{TODO expliquer local et global}
+  \item We may also assume pressure to be constant at the
+    inlet. Applying Bernoulli's theorem this time on a courant tube,
+    we get $p = - \frac 1 2 V_{\text{mean}}^{2}$
 \end{itemize}
 
 
@@ -617,8 +635,8 @@ three main variations on these.
     Wall         & $U = 0$     & $V = 0$     & $P_{x} = 0$             & $T_{x} = 0$ \\
     Heated Wall  & $U = 0$     & $V = 0$     & $P_{x} = 0$             & $T_{x} = 1$ \\
 %    \hline
-    Inlet           & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2}$  & $T = 0$     \\
-    Outlet, $V < 0$ & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac{V^{2}}{2} $ & $T = 0$     \\
+    Inlet           & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac 1 2 {\vb{v}^{2}}$  & $T = 0$     \\
+    Outlet, $V < 0$ & $U_{y} = 0$ & $V_{y} = 0$ & $P = -\frac 1 2 {\vb{v}^{2}} $ & $T = 0$     \\
     Outlet, $V > 0$ & $U_{y} = 0$ & $V_{y} = 0$ & $P = 0$                 & $T_y = 0$   \\
     \hline
   \end{tabular}
@@ -650,7 +668,7 @@ flux $\Phi$ onto the solution of our problem with as a boundary
 condition on the inlet $p = - \Phi^{2}/2$, and by $g$ the application
 that maps a solution vector to its mass flux, we are interested in
 obtaining a fixed point of $F = g \circ f$ (or $G = f \circ g$. $F$ is
-simpler since it operates on scalars).
+simpler to solve for since it operates on scalars).
 
 The first idea is to use a simple fixed point method : $\Phi_{n+1} =
 F(\Phi_{n})$. This corresponds to fixing a mass flux, computing the
@@ -787,6 +805,21 @@ three variations we describe.
   \label{table:debits}
 \end{table}
 
+\begin{table}[!h]
+  \centering
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    & LB Bench & LB Lequere & GB Bench & GB Lequere \\
+    \hline
+    Recirculation size  & 0.72 & 0.71 & 0.66 & 0.78 \\
+    Point where $V = 0$ & 0.47 & 0.44 & 0.52 & 0.50 \\
+    \hline
+  \end{tabular}
+  \caption{Recirculation sizes ($\pm 0.02$) and point where $V = 0$ at
+    the outlet for different boundary conditions.}
+  \label{table:debits}
+\end{table}
+
 
 First of all, the results are sensibly equal when $U = 0$ and when
 $U_{x} = 0$. Indeed, the only difference is that horizontal velocity
@@ -798,15 +831,12 @@ changes the mass flux, with higher fluxes for global Bernoulli. An
 heuristic argument to explain this effect is as follows : global
 Bernoulli, by increasing mean pressure, leads to higher vertical
 velocities at the inlet. Indeed, mean pressure at the inlet using
-global Bernoulli is $- (\int_{\text{inlet}} V)^{2}/2$, and with local
-Bernoulli it is $- (\int_{\text{inlet}} V^{2}) / 2$. A simple
+global Bernoulli is $- \frac 1 2 (\int_{\text{inlet}} V)^{2}$, and with local
+Bernoulli it is $- \frac 1 2 (\int_{\text{inlet}} V^{2})$. A simple
 application of Cauchy-Schwartz inequality shows that mean pressure is
 higher when using global Bernoulli.
 
-When the boundary conditions do not distinguish incoming and outgoing
-fluid, incoming fluid is cold. This means it is evacuated less quickly
-than when incoming air is at constant temperature, and the mass flux
-is lower.
+TODO explication de pourquoi debit plus grand avec bench
 \subsection{Chimney in a larger box}
 TODO essayer le code de E. Chénier, changer les CL (boite
 ouverte). Comparer les CL de la boite restreinte avec les résultats de
