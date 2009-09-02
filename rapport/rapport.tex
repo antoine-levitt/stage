@@ -670,7 +670,7 @@ that maps a solution vector to its mass flux, we are interested in
 obtaining a fixed point of $F = g \circ f$ (or $G = f \circ g$. $F$ is
 simpler to solve for since it operates on scalars).
 
-The first idea is to use a simple fixed point method : $\Phi_{n+1} =
+The first idea is to use a simple fixed point iteration : $\Phi_{n+1} =
 F(\Phi_{n})$. This corresponds to fixing a mass flux, computing the
 corresponding solution, computing its mass flux, setting this as the
 reference mass flux, and iterate. However, this method does not
