@@ -371,11 +371,11 @@ expressions. The discrete fluxes then write :
 
 These equations are the simple application of our interpolations,
 except for the non-linear terms, which are centered, instead of being
-interpolated like the others (in which case we would write $\tilde{\mathcal
-F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL} (\frac{\vb{v}_{K} +
-  \vb{v}_{L}}{2}$) . This is to ensure that discrete forms of kinetic
-energy inequalities can be obtained (for more details, see TODO :
-trouver la ref).
+interpolated like the others (in which case we would write
+$\tilde{\mathcal F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL}
+(\frac{\vb{v}_{K} + \vb{v}_{L}}{2}$) . This is to ensure that discrete
+forms of kinetic energy inequalities can be obtained (for more
+details, see \cite{che-06-num}).
 
 The discrete equations we solve are then : for each $K \in \mathcal
 M_{\Omega}$, 
@@ -434,7 +434,8 @@ and Pitk{\"a}ranta proposed in \cite{brezzip} to add an artificial
 diffusion by substracting $\lambda \Delta p$ to the mass conservation
 equation. This term is discretised like $\Delta \vb{v}$, and
 consequently we have $$\tilde{\mathcal{F}}_{KL} = m_{KL} \vb{v}_{KL}
-\cdot \vb{n}_{KL} - TODO.$$ Note that $\tilde{\mathcal{G}}$ and
+\cdot \vb{n}_{KL} - \lambda_{KL} m_{KL} (\nabla p)_{KL} \cdot
+\vb{n}_{KL}} .$$ Note that $\tilde{\mathcal{G}}$ and
 $\tilde{\mathcal{H}}$ must use this new definition of
 $\tilde{\mathcal{F}}$ in the discretisation of non-linear transport
 terms, again to ensure kinetic energy balance.
