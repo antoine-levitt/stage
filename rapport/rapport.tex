@@ -768,6 +768,13 @@ noticeable on figure \ref{fig:lambdas}. For figure
 point, this is because the third point does not belong to the same
 cluster as the two before and two after.
 
+The main difference between per-vertex and per-cell clustering is that
+much less oscillations are produced when using low stabilisation. It
+seems that clusters with per-cell clustering are too small for
+stabilisation to be really effective. Indeed, one would expect
+that clusters have to be large enough to hold a Laplacian stencil,
+ruling out 2x2 clusters.
+
 \begin{figure}[h!]
 \centering
 \includegraphics{figs/lambdas}
