@@ -621,7 +621,7 @@ three main variations on these.
     not $V > 0$.
   \item We may also assume pressure to be constant at the
     inlet. Applying Bernoulli's theorem this time on a courant tube,
-    we get $p = - \frac 1 2 V_{\text{mean}}^{2}$
+    we get $p = - \frac 1 2 V_{\text{mean}}^{2}$.
 \end{itemize}
 
 
@@ -825,26 +825,35 @@ three variations we describe.
   \label{table:debits}
 \end{table}
 
-\begin{table}[!h]
-  \centering
-  \begin{tabular}{|l|c|c|c|c|}
-    \hline
-    & LB Bench & LB Lequere & GB Bench & GB Lequere \\
-    \hline
-    Recirculation size  & 0.72 & 0.71 & 0.66 & 0.78 \\
-    Point where $V = 0$ & 0.47 & 0.44 & 0.52 & 0.50 \\
-    \hline
-  \end{tabular}
-  \caption{Recirculation sizes ($\pm 0.02$) and point where $V = 0$ at
-    the outlet for different boundary conditions.}
-  \label{table:recirculations}
-\end{table}
+% \begin{table}[!h]
+%   \centering
+%   \begin{tabular}{|l|c|c|c|c|}
+%     \hline
+%     & LB Bench & LB Lequere & GB Bench & GB Lequere \\
+%     \hline
+%     Recirculation size  & 0.72 & 0.71 & 0.66 & 0.78 \\
+%     Point where $V = 0$ & 0.47 & 0.44 & 0.52 & 0.50 \\
+%     \hline
+%   \end{tabular}
+%   \caption{Recirculation sizes ($\pm 0.02$) and point where $V = 0$ at
+%     the outlet for different boundary conditions.}
+%   \label{table:recirculations}
+% \end{table}
 
 
 First of all, the results are sensibly equal when $U = 0$ and when
 $U_y = 0$. Indeed, the only difference is that horizontal velocity
-is not exactly zero when using $U_y = 0$, but it does not noticeably
+is not exactly zero when using $U_y = 0$ (see figure \ref{fig:LB-0-0-u-bas}), but it does not noticeably
 modify the results.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{figs/LB-0-0-u-bas}
+\caption{Level sets of horizontal velocity $U$ at the inlet using
+  $U_{y} = 0$ and local Bernoulli, showing an aspiration.}
+\label{fig:LB-0-0-u-bas}
+\end{figure}
+
 
 Using local or global boundary conditions for the inlet considerably
 changes the mass flux, with higher fluxes for global Bernoulli. An
@@ -854,15 +863,30 @@ velocities at the inlet. Indeed, mean pressure at the inlet using
 global Bernoulli is $- \frac 1 2 (\int_{\text{inlet}} V)^{2}$, and with local
 Bernoulli it is $- \frac 1 2 (\int_{\text{inlet}} V^{2})$. A simple
 application of Cauchy-Schwartz inequality shows that mean pressure is
-higher when using global Bernoulli.
+higher when using global Bernoulli. As a consequence, a surpression is
+created, which increases velocities and reduces pressure. The
+resulting profiles are given figures \ref{fig:GB-v} and \ref{fig:LB-pv}.
 
-TODO explication de pourquoi debit plus grand avec bench
-\subsection{Chimney in a larger box}
-TODO essayer le code de E. Chénier, changer les CL (boite
-ouverte). Comparer les CL de la boite restreinte avec les résultats de
-la grande.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{figs/GB-v}
+\caption{Vertical velocity profile at the inlet, for global
+  Bernoulli. Pressure is -3660.}
+\label{fig:GB-v}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{figs/LB-pv}
+\caption{Vertical velocity (top, right scale) and pressure (bottom,
+  left scale) profile at the inlet, for local Bernoulli.}
+\label{fig:LB-pv}
+\end{figure}
+
+
 \section{Conclusion}
 TODOFIN
+
 \listoffigures
 \listoftables
 
