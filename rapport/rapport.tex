@@ -582,7 +582,7 @@ top. Depending on the choice of parameters, we may observe a
 recirculation : fluid entering at the top right of the chimney and
 getting out at the top left.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics{figs/schema}
 \caption{Physical setup of our problem.}
@@ -705,7 +705,7 @@ Convergence can be seen in Fig. \ref{fig:conv_newton}. After a
 transient, we observe the characteristic quadratic convergence of
 Newton method in both residual $||f(x_n)||_\infty$ and increment $||x_{n} -
 x_{n-1}||_\infty$.
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics{figs/convergence}
 \caption{Convergence of Newton method in a typical case.}
@@ -723,7 +723,7 @@ difficult to investigate true convergence, since the simulation on the
 finest grid (240k cells) already uses around 2GB of RAM and takes six
 hours to complete.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics{figs/conv-maillage}
 \caption{Temperature at mid-width for different meshes (zoom). Maximum
@@ -755,18 +755,32 @@ until it reaches a plateau around $10^{-4}$. For large values of
 $\lambda$, the iterative solver fails again.
 
 Even ignoring conditioning, choosing an appropriate $\lambda$ is no
-easy task. Figure \ref{fig:lambdas} shows the pressure at mid-width
-for our problem with different $\lambda$. For small values of
+easy task. Figure \ref{fig:lambdas} and \ref{fig:lambdas-mm1} show the
+pressure at mid-width for our problem with different $\lambda$. Figure
+\ref{fig:lambdas} is done with per-vertex clustering (clusters of
+2x2), while figure \ref{fig:lambdas-mm1} is done with per-cell
+clustering, giving larger clusters (around 3x3).  For small values of
 $\lambda$ (under $10^{-5}$), we can see the even-odd oscillations. As
-$\lambda$ increases, clusters (here, of two cells) appear, until a
-stage around $10^{-4}$ where pressure becomes constant inside the
-clusters.
+$\lambda$ increases, clusters appear, until a stage around $10^{-4}$
+where pressure becomes constant inside the clusters. This is most
+noticeable on figure \ref{fig:lambdas}. For figure
+\ref{fig:lambdas-mm1}, where there is a large oscillation every third
+point, this is because the third point does not belong to the same
+cluster as the two before and two after.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics{figs/lambdas}
-\caption{Pressure at mid-width, cluster method (zoom).}
+\caption{Pressure at mid-width, per-vertex cluster method (zoom).}
 \label{fig:lambdas}
+\end{figure}
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics{figs/lambdas-mm1}
+\caption{Pressure at mid-width, per-cell cluster method (zoom).}
+\label{fig:lambdas-mm1}
 \end{figure}
 
 On the other hand, the Brezzi-Pitk\"aranta method (without clusters)
@@ -776,7 +790,7 @@ noticeably changes, while that was not the case with the cluster
 method clusters method. Generally, clusters tend to limit the impact
 of stabilisation, and avoid too much variation from the true field.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics{figs/bps}
 \caption{Pressure at mid-width, Brezzi-Pitk\"aranta method (zoom).}
