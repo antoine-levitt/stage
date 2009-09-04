@@ -24,7 +24,7 @@
   In this project we study numerical methods to numerically approximate
 the steady state of a flow. We present the Navier-Stokes equations and
 their approximations for free convection (Boussinesq hypothesis). We
-use the colocated scheme introduced in
+use the collocated scheme introduced in
 \cite{che-09-col,che-08-col,che-06-num} and apply it to a benchmark
 problem, a heated chimney. On this problem, different boundary
 conditions are compared, and numerical properties of the scheme are
@@ -67,14 +67,14 @@ methods :
   interpolated from values at neighbouring cells.
 \end{itemize}
 
-All these methods discretize the solution according to a grid. There
+All these methods discretise the solution according to a grid. There
 are various choices for the location of the unknowns inside the grid,
 and methods can be split between {\bf collocated} and {\bf staggered}
 grids. In collocated grids, all variables are stored in the cell
 centers. In staggered grids, scalar variables are still stored in cell
 centers, but velocities are located at cell faces. The main motivation
 for using staggered grids is to avoid the so-called checkerboard
-pressure modes that arise from the discretization of first derivatives
+pressure modes that arise from the discretisation of first derivatives
 in collocated grids.
 
 Examples of classical schemes on staggered grids include the
@@ -103,7 +103,7 @@ To test the accuracy of these variants in the context of free
 convection (where fluid flow is only a result of temperature
 gradients), G. Desrayaud organised a benchmark in 2007, around a
 simple problem. This benchmark compared 6 methods, stationary and
-instationary, colocated and staggered, from industrial products and
+instationary, collocated and staggered, from industrial products and
 research codes. It produced a wide range of contradictory
 results. However, careful examinations showed that different boundary
 conditions were used. This work presents the differences produced by
@@ -158,14 +158,14 @@ a fluid. The conservation of momentum equation reads
     \nabla \vb{v}\right) = -\nabla p + \nabla \cdot\mathbb{T} +
   \vb{f}.
 \end{equation}
-$\mathbb{T}$ is the stress tensor, and \vb{f} are the external volumic
-forces exerting on the fluid (gravity, electromagnetic ...).  We need
-an expression of $\mathbb{T}$ as a function of the other variables for
-the model to be complete. The second term, $\vb{v} \cdot \nabla
-\vb{v}$, known as the convective acceleration, is to be understood
-as $(\vb{v} \cdot \nabla) \vb{v}$, that is, the ``transport operator''
-$(\vb{v} \cdot \nabla) = \sum_{i=1}^d v_i \frac{\partial}{\partial i}$
-applied to $\vb{v}$.
+$\mathbb{T}$ is the stress tensor, and \vb{f} are the external
+volumetric forces exerting on the fluid (gravity, electromagnetic
+...).  We need an expression of $\mathbb{T}$ as a function of the
+other variables for the model to be complete. The second term, $\vb{v}
+\cdot \nabla \vb{v}$, known as the convective acceleration, is to be
+understood as $(\vb{v} \cdot \nabla) \vb{v}$, that is, the ``transport
+operator'' $(\vb{v} \cdot \nabla) = \sum_{i=1}^d v_i
+\frac{\partial}{\partial i}$ applied to $\vb{v}$.
 
 The conservation of mass equation is
 \begin{equation}
@@ -264,7 +264,7 @@ temperature. These can be Dirichlet or Neumann boundary
 conditions. Finite volumes are a way to approximate solutions of the
 PDEs, by computing their values on elements of a mesh : fields will be
 discretised as piecewise constant functions on the subdivision. We
-assume the domain $\Omega$ to be subdivised in polygons $K \in
+assume the domain $\Omega$ to be subdivided in polygons $K \in
 \mathcal{M}_\Omega$, called {\bf control volumes} or {\bf cells}. Each element $K$ is
 linked to a set of neighbours $\mathcal{N}_K$ by an interface
 $\sigma_{KL}$, $L \in \mathcal N_K$. The interface is oriented by the
@@ -324,7 +324,7 @@ The difference with the classical finite differences method is that
 the discretisation is performed on fluxes rather than on differential
 operators. This is simpler because one differentiation order is lost :
 Laplacians become gradients integrals. Another advantage is that the
-finite volume method is much more easily generalized to various sorts
+finite volume method is much more easily generalised to various sorts
 of meshes, and not limited to rectangular ones.
 
 This method can also be seen as a finite element method, where the
@@ -349,14 +349,14 @@ order terms is straightforward by defining edge values for the
 fields. For $\varphi = p$, $T$ or $\vb{v_{i}}$, $i = 1 \dots d$, we
 define :  $$\varphi_{KL} = \frac{d_{L\sigma} \ \varphi_{K} +
   d_{K\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
-  \sigma}$ is the distance between the volume center $x_{K}$ and the
+  \sigma}$ is the distance between the volume centre $x_{K}$ and the
 interface $\sigma_{KL}$.
 
 For Laplacians, whose finite volume formulation require the
 discretisation of edge gradients, we define $$(\nabla \varphi)_{KL} =
 \frac{(\varphi_{K} - \varphi_{L}) (\vb{x}_{K} - \vb{x_{L}})}
 {{d_{KL}}^{2}},$$ where $d_{KL}$ is the distance between volume
-centers $\vb{x}_{K}$ and $\vb{x}_{L}$.
+centres $\vb{x}_{K}$ and $\vb{x}_{L}$.
 
 We can now write discrete versions of fluxes $\mathcal F$, $\mathcal
 G$ and $\mathcal H$. We shall here require a geometric condition on
@@ -374,7 +374,7 @@ expressions. The discrete fluxes then write :
 \end{align}
 
 These equations are the simple application of our interpolations,
-except for the non-linear terms, which are centered, instead of being
+except for the non-linear terms, which are centred, instead of being
 interpolated like the others (in which case we would write
 $\tilde{\mathcal F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL}
 (\frac{\vb{v}_{K} + \vb{v}_{L}}{2}$) . This is to ensure that discrete
@@ -406,7 +406,7 @@ appears through its gradient in the continuous equation
 (\ref{b-mom}). In the discrete system, we have $\sum_{L \in
   \mathcal{N}_{K}} m_{KL} \vb{n}_{KL} = \vb{0}$, which shows that
 equation (\ref{discr-2}) is not modified by adding a constant to the
-pressure field. This is adressed by adding an equation, for instance
+pressure field. This is addressed by adding an equation, for instance
 by fixing the pressure at a particular cell.
 
 Less obvious however is the fact that our discretisation leaves
@@ -433,9 +433,9 @@ consecutive pressure variables.
 
 Many solutions have been proposed for this problem. The guiding
 principle is to restore in the discretisation of $\nabla p$ a
-dependance of the pressure at the same cell it is computed on. Brezzi
+dependence of the pressure at the same cell it is computed on. Brezzi
 and Pitk{\"a}ranta proposed in \cite{brezzip} to add an artificial
-diffusion by substracting $\lambda \Delta p$ to the mass conservation
+diffusion by subtracting $\lambda \Delta p$ to the mass conservation
 equation. This term is discretised like $\Delta \vb{v}$, and
 consequently we have $$\tilde{\mathcal{F}}_{KL} = m_{KL} \vb{v}_{KL}
 \cdot \vb{n}_{KL} - \lambda_{KL} m_{KL} (\nabla p)_{KL} \cdot
@@ -461,7 +461,7 @@ converge (see \cite{eym-07-sta}).
 \subsection{Newton method}
 At the core of the algorithm is the solution of a nonlinear system of
 size equal to the number of cells. We use the standard Newton
-algorithm : we linearize the problem around an iterate $x_n$, solve
+algorithm : we linearise the problem around an iterate $x_n$, solve
 this linear problem to obtain $x_{n+1}$, and repeat until
 convergence. Denoting by $x$ the unknowns of our problem, i.e. the
 velocities, pressures and temperatures at the cell centers, by $f(x)$
@@ -534,16 +534,16 @@ are, with $x^i$ as an approximation of $x(i h)$ :
 \end{align}
 
 Note that while forward Euler is an explicit method, both backward
-euler and the trapezoidal rule are implicit : at each iteration, an
+Euler and the trapezoidal rule are implicit : at each iteration, an
 equation has to be solved for $x^{i+1}$. Generally speaking, implicit
 methods are more stable than explicit ones, which allows larger
 steps to be taken.
 
-However, our problem, once spatially discretized, is not exactly an
+However, our problem, once spatially discretised, is not exactly an
 ODE, because of the absence of an evolution equation for
 pressure. This is because, in the incompressible Navier-Stokes
-equations, pressure is not explicitely given. Rather, it is
-implicitely determined by the condition $\nabla \cdot \vb{v} = 0$, as
+equations, pressure is not explicitly given. Rather, it is
+implicitly determined by the condition $\nabla \cdot \vb{v} = 0$, as
 can be seen by taking the divergence of (\ref{b-mom}), which makes
 $\frac{\partial \vb{v}}{\partial t}$ vanish, and gives $p$ as the
 solution of a Poisson problem.
@@ -562,9 +562,9 @@ backward Euler method, the equation (\ref{be}) can be rewritten
 as
 $$f(x^{i+1}) - \frac{x^{i+1}}{h} + \frac{x^i}{h} = 0.$$
 
-This is a minor correction of the stationnary equation $f(x) = 0$, and
+This is a minor correction of the stationary equation $f(x) = 0$, and
 can be solved in the same way. Incidentally, notice that the only
-change in the Jacobian matrix is to substract $\frac{1}{h}$ on its
+change in the Jacobian matrix is to subtract $\frac{1}{h}$ on its
 diagonal. For small $h$, this has the nice side effect of improving
 its conditioning, since it brings the matrix closer to $\frac{1}{h}
 I$, which has condition number $1$. This speeds up iterative methods
@@ -613,7 +613,7 @@ line (a line that is tangential to the velocity vector at every
 point), $p + \frac{1}{2} \vb{v}^{2}$ is a constant. Assuming the
 domain to be infinite, at infinity we would have $\vb{v} = 0$, $p =
 0$. Bernoulli's theorem then gives $p_{\text inlet} + \frac 1 2 {\vb
-  {v_{\text{inflet}}}}^{2} = p_{\text {infinity}} + \frac 1 2 {\vb
+  {v_{\text{inlet}}}}^{2} = p_{\text {infinity}} + \frac 1 2 {\vb
   {v_{\text{infinity}}}}^{2} = 0$, so $p_{\text{inlet}} = - \frac 1 2
 {\vb v_{\text{inlet}}}^{2}$.
 
@@ -627,7 +627,7 @@ three main variations on these.
     authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
     not $V > 0$.
   \item We may also assume pressure to be constant at the
-    inlet. Applying Bernoulli's theorem this time on a courant tube,
+    inlet. Applying Bernoulli's theorem this time on a current tube,
     we get $p = - \frac 1 2 V_{\text{mean}}^{2}$.
 \end{itemize}
 
@@ -811,7 +811,7 @@ of stabilisation, and avoid too much variation from the true field.
 \end{figure}
 \subsection{Effects of different boundary conditions}
 \label{effect-bc}
-We examine the quantitive effect of the three variations described
+We examine the quantitative effect of the three variations described
 above. Table \ref{table:debits} shows total mass flux
 ($\int_{\text{inlet}} \vb{v} \cdot \vb{n} ds = \int_{\text{outlet}}
 \vb{v} \cdot \vb{n} ds$, since $\nabla \cdot \vb v = 0$) with the
@@ -871,12 +871,13 @@ changes the mass flux, with higher fluxes for global Bernoulli. An
 heuristic argument to explain this effect is as follows : global
 Bernoulli, by increasing mean pressure, leads to higher vertical
 velocities at the inlet. Indeed, mean pressure at the inlet using
-global Bernoulli is $- \frac 1 2 (\int_{\text{inlet}} V)^{2}$, and with local
-Bernoulli it is $- \frac 1 2 (\int_{\text{inlet}} V^{2})$. A simple
-application of Cauchy-Schwartz inequality shows that mean pressure is
-higher when using global Bernoulli. As a consequence, a surpression is
-created, which increases velocities and reduces pressure. The
-resulting profiles are given figures \ref{fig:GB-v} and \ref{fig:LB-pv}.
+global Bernoulli is $- \frac 1 2 (\int_{\text{inlet}} V)^{2}$, and
+with local Bernoulli it is $- \frac 1 2 (\int_{\text{inlet}}
+V^{2})$. A simple application of Cauchy-Schwartz inequality shows that
+mean pressure is higher when using global Bernoulli. As a consequence,
+an overpressure is created, which increases velocities and reduces
+pressure. The resulting profiles are given figures \ref{fig:GB-v} and
+\ref{fig:LB-pv}.
 
 \begin{figure}[h!]
 \centering
