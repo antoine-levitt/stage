@@ -820,13 +820,16 @@ three variations we describe.
   \centering
   \begin{tabular}{|l|c|c|c|c|}
     \hline
-    & LB Bench & LB Lequere & GB Bench & GB Lequere \\
+    & LB diff & LB non-diff & GB diff & GB non-diff \\
     \hline
     $U = 0$ & 72.93 & 58.57 & 85.50 & 76.99\\
     $U_y = 0$ & 73.23 & 59.08 & 85.51 & 77.00 \\
     \hline
   \end{tabular}
-  \caption{Mass flux for different boundary conditions}
+  \caption{Mass flux for different boundary conditions. LB means local
+  Bernoulli, GB means global Bernoulli. Diff means differentiate
+  between incoming and outgoing fluid at the outlet, non-diff mean do
+  not differentiate.}
   \label{table:debits}
 \end{table}
 
