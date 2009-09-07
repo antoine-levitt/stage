@@ -810,6 +810,7 @@ of stabilisation, and avoid too much variation from the true field.
 \label{fig:bps}
 \end{figure}
 \subsection{Effects of different boundary conditions}
+\subsubsection{Mass flux}
 \label{effect-bc}
 We examine the quantitative effect of the three variations described
 above. Table \ref{table:debits} shows total mass flux
@@ -853,18 +854,10 @@ three variations we describe.
 
 
 First of all, the results are sensibly equal when $U = 0$ and when
-$U_y = 0$. Indeed, the only difference is that horizontal velocity
-is not exactly zero when using $U_y = 0$ (see figure \ref{fig:LB-0-0-u-bas}), but it does not noticeably
-modify the results.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{figs/LB-0-0-u-bas}
-\caption{Level sets of horizontal velocity $U$ at the inlet using
-  $U_{y} = 0$ and local Bernoulli, showing an aspiration.}
-\label{fig:LB-0-0-u-bas}
-\end{figure}
-
+$U_y = 0$. Indeed, the only difference is that horizontal velocity is
+not exactly zero when using $U_y = 0$ (see figure
+\ref{fig:LB-0-0-u-bas}), but it does not noticeably modify the
+results.
 
 Using local or global boundary conditions for the inlet considerably
 changes the mass flux, with higher fluxes for global Bernoulli. An
@@ -876,26 +869,25 @@ with local Bernoulli it is $- \frac 1 2 (\int_{\text{inlet}}
 V^{2})$. A simple application of Cauchy-Schwartz inequality shows that
 mean pressure is higher when using global Bernoulli. As a consequence,
 an overpressure is created, which increases velocities and reduces
-pressure. The resulting profiles are given figures \ref{fig:GB-v} and
-\ref{fig:LB-pv}.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.6\textwidth]{figs/GB-v}
-\caption{Vertical velocity profile at the inlet, for global
-  Bernoulli. Pressure is -3660.}
-\label{fig:GB-v}
-\end{figure}
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.6\textwidth]{figs/LB-pv}
-\caption{Vertical velocity (top, right scale) and pressure (bottom,
-  left scale) profile at the inlet, for local Bernoulli.}
-\label{fig:LB-pv}
-\end{figure}
+pressure. The resulting profiles, both in profile and velocities, are
+given figures \ref{fig:GB-v} and \ref{fig:LB-pv}.
 
 
+\subsubsection{Profiles}
+Figures \ref{fig:p-midwidth} and \ref{fig:v-midwidth} represent
+pressures and vertical velocities at mid-width for the variations we
+detailed. $U = 0$ rather than $U_{y} = 0$ did not significantly
+change the profiles, so we use $U_y = 0$ for these.
+
+Near the inlet there are two cases : with GB, fluid movement is that
+of a fluid in a conduct, with constant velocity and linearly
+decreasing pressure due to viscosity losses. With LB however, there is
+a transition phase where the velocity rises to a constant value. As
+such, GB better represents fluid motion in a large domain.
+
+Discriminating fluid at the outlet mainly changes the size of the
+recirculation, which explains the bumps near the outlet seen in the
+profiles.
 \section{Conclusion}
 TODO
 
@@ -907,5 +899,45 @@ TODO
 \addcontentsline{toc}{section}{References}
 \bibliography{rapport}
 
+\section{Annex : figures}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{figs/GB-v}
+\caption{Vertical velocity profile at the inlet, for global
+  Bernoulli. Pressure is -3660.}
+\label{fig:GB-v}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.6\textwidth]{figs/LB-pv}
+\caption{Vertical velocity (top, right scale) and pressure (bottom,
+  left scale) profile at the inlet, for local Bernoulli.}
+\label{fig:LB-pv}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.6\textwidth]{figs/LB-0-0-u-bas}
+\caption{Level sets of horizontal velocity $U$ at the inlet using
+  $U_{y} = 0$ and local Bernoulli, showing an aspiration.}
+\label{fig:LB-0-0-u-bas}
+\end{figure}
+
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\textwidth]{figs/p-midwidth}
+\caption{Vertical profile of pressure at mid-width.}
+\label{fig:p-midwidth}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\textwidth]{figs/v-midwidth}
+\caption{Vertical profile of vertical velocity at mid-width.}
+\label{fig:v-midwidth}
+\end{figure}
 
 \end{document}
