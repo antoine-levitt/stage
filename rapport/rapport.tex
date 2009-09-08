@@ -54,7 +54,7 @@ methods :
 
 \begin{itemize}
 \item {\bf Finite difference method} approximates fields by their
-  values on points, and interpolates derivatives. This, while the
+  values on points, and approximates derivatives. This, while the
   simplest of all methods, generally yields poor accuracy.
 
 \item {\bf Finite element method} convert the PDE into an equivalent
@@ -79,7 +79,7 @@ in collocated grids.
 
 Examples of classical schemes on staggered grids include the
 Marker-And-Cell (MAC) scheme
-\cite{har-65-num,Pat-80-num,har-65-num,nic-92-ana,cho-97-ana,cho-97-mac}. Collocated
+\cite{Pat-80-num,har-65-num,nic-92-ana,cho-97-ana,cho-97-mac}. Collocated
 grids need stabilisation to avoid checkerboard modes. Various methods
 exist. We use a variant of the Brezzi-Pitk{\"a}ranta approach
 \cite{mat-97-apr,brezzip,brezzip2}, which consists in introducing an
@@ -106,8 +106,8 @@ simple problem. This benchmark compared 6 methods, stationary and
 instationary, collocated and staggered, from industrial products and
 research codes. It produced a wide range of contradictory
 results. However, careful examinations showed that different boundary
-conditions were used. This work presents the differences produced by
-these different boundary conditions.
+conditions were probably used. This work presents the differences
+produced by these different boundary conditions.
 
 % points \`a mentionner dans l'introduction:
 
@@ -158,14 +158,14 @@ a fluid. The conservation of momentum equation reads
     \nabla \vb{v}\right) = -\nabla p + \nabla \cdot\mathbb{T} +
   \vb{f}.
 \end{equation}
-$\mathbb{T}$ is the stress tensor, and \vb{f} are the external
-volumetric forces exerting on the fluid (gravity, electromagnetic
-...).  We need an expression of $\mathbb{T}$ as a function of the
-other variables for the model to be complete. The second term, $\vb{v}
-\cdot \nabla \vb{v}$, known as the convective acceleration, is to be
-understood as $(\vb{v} \cdot \nabla) \vb{v}$, that is, the ``transport
-operator'' $(\vb{v} \cdot \nabla) = \sum_{i=1}^d v_i
-\frac{\partial}{\partial i}$ applied to $\vb{v}$.
+$\mathbb{T}$ is the visceous stress tensor, and \vb{f} are the
+external volumetric forces exerting on the fluid (gravity,
+electromagnetic ...).  We need an expression of $\mathbb{T}$ as a
+function of the other variables for the model to be complete. The
+second term, $\vb{v} \cdot \nabla \vb{v}$, known as the convective
+acceleration, is to be understood as $(\vb{v} \cdot \nabla) \vb{v}$,
+that is, the ``transport operator'' $(\vb{v} \cdot \nabla) =
+\sum_{i=1}^d v_i \frac{\partial}{\partial i}$ applied to $\vb{v}$.
 
 The conservation of mass equation is
 \begin{equation}
@@ -235,11 +235,15 @@ conservation, which, under our hypotheses, is
 
 This is a generalisation of the heat equation in the case of a moving
 medium. Note that since $\nabla \cdot \vb{v} = 0$, our variable change
-$T = \delta T$ has no effect on this equation.
+$T = T - T_0$ has no effect on this equation.
 
 Finally, we adimensionalise the equations by introducing Rayleigh and
 Prandtl numbers $Ra$ and $Pr$, which reduces the number of parameters
-to only two. The final form of our equations is then
+to only two. This adimentionalisation requires the choice for a
+characteristic length and temperature difference. These are chosen
+according to our problem, see section \ref{physsetup}.
+
+The final form of our equations is then
 \begin{align}
   \label{b-mass}
   \nabla \cdot \vb{v} &= 0& \text{Mass}\\
@@ -325,7 +329,7 @@ the discretisation is performed on fluxes rather than on differential
 operators. This is simpler because one differentiation order is lost :
 Laplacians become gradients integrals. Another advantage is that the
 finite volume method is much more easily generalised to various sorts
-of meshes, and not limited to rectangular ones.
+of meshes, and not limited to orthogonal ones.
 
 This method can also be seen as a finite element method, where the
 test functions $v$ are chosen in the space of piecewise constant
@@ -346,7 +350,7 @@ The fluxes $\mathcal F_{KL}$ , $\mathcal G_{KL}$ and $\mathcal H_{KL}$
 have to be discretised for piecewise constant functions. The simplest
 approach is to use a linear interpolation. The discretisation of first
 order terms is straightforward by defining edge values for the
-fields. For $\varphi = p$, $T$ or $\vb{v_{i}}$, $i = 1 \dots d$, we
+fields. For $\varphi = T$ or $\vb{v_{i}}$, $i = 1 \dots d$, we
 define :  $$\varphi_{KL} = \frac{d_{L\sigma} \ \varphi_{K} +
   d_{K\sigma} \ \varphi_{L}}{d_{K\sigma} + d_{L\sigma}},$$ where $d_{K
   \sigma}$ is the distance between the volume centre $x_{K}$ and the
@@ -358,6 +362,14 @@ discretisation of edge gradients, we define $$(\nabla \varphi)_{KL} =
 {{d_{KL}}^{2}},$$ where $d_{KL}$ is the distance between volume
 centres $\vb{x}_{K}$ and $\vb{x}_{L}$.
 
+Pressure discretisation is more subtle. We require the discrete
+pressure gradient to be the dual of discrete divergence (as defined by
+the gradient above). This leads to the discretisation of $p
+\vb{n}_{KL}$ as $\frac{d_{K \sigma}}{d_{K L}}(p_L -
+p_K)\vb{n}_{KL}$. Note that this gradient is not consistent. It is
+however required to obtain discrete versions of kinematic energy
+inequalities (for more details, see \cite{che-06-num}).
+
 We can now write discrete versions of fluxes $\mathcal F$, $\mathcal
 G$ and $\mathcal H$. We shall here require a geometric condition on
 the meshing, namely that $(\vb{x}_{K} - \vb{x_{L}})$ is orthogonal to
@@ -367,7 +379,7 @@ expressions. The discrete fluxes then write :
 \begin{align}
   \tilde{\mathcal{F}}_{KL} &= m_{KL} \vb{v}_{KL} \cdot \vb{n}_{KL}\\
   \tilde{\mathcal{G}}_{KL} &= \tilde{\mathcal F}_{KL} \frac{\vb{v}_{K} + \vb{v}_{L}}{2}
-  + m_{KL} p_{KL} \vb{n}_{KL}
+  + m_{KL} \frac{d_{K \sigma}}{d_{K L}}(p_L -p_K) \vb{n}_{KL}
   - Pr  \ m_{KL} (\nabla \vb{v})_{KL} \vb{n}_{KL}\\
   \tilde{\mathcal{H}}_{KL} &= \tilde{\mathcal F}_{KL} \frac{T_{K} + T_{L}} {2}
   - m_{KL} (\nabla T)_{KL} \cdot \vb{n}_{KL}
@@ -377,9 +389,8 @@ These equations are the simple application of our interpolations,
 except for the non-linear terms, which are centred, instead of being
 interpolated like the others (in which case we would write
 $\tilde{\mathcal F}_{KL} \vb{v}_{KL}$ and not $\tilde{\mathcal F}_{KL}
-(\frac{\vb{v}_{K} + \vb{v}_{L}}{2}$) . This is to ensure that discrete
-forms of kinetic energy inequalities can be obtained (for more
-details, see \cite{che-06-num}).
+(\frac{\vb{v}_{K} + \vb{v}_{L}}{2}$) . This is again to ensure that
+discrete forms of kinetic energy inequalities can be obtained.
 
 The discrete equations we solve are then : for each $K \in \mathcal
 M_{\Omega}$, 
@@ -499,8 +510,7 @@ We use a modified version of the conjugate gradient method, with a
 preconditioning based on an incomplete LU factorisation. For some
 ill-conditioned problems, this iterative algorithm may not converge
 fast enough, or even fail to converge altogether : we then fall back
-to a direct method, which is slower and less precise but has no
-convergence issues.
+to a direct method, which is slower but has no convergence issues.
 
 \subsubsection{Under-relaxation}
 For some problems, Newton method may oscillate around the solution. An
@@ -579,6 +589,7 @@ benchmark. This problem involves free convection (since the fluid is
 only set in motion by the heating), and the fluid behaviour is
 described by the Boussinesq equations we derived.
 \subsection{Physical setup}
+\label{physsetup}
 The ``chimney'' represented figure \ref{fig:schema} is composed of a
 cavity bounded by two walls. A portion of the left wall is heated, and
 the fluid flows inside the cavity, with the top and bottom left
@@ -603,8 +614,8 @@ Walls are treated by imposing continuity of velocities ($U = V = 0$),
 and a thermal flux (nonzero for the heated wall, zero otherwise). Open
 boundaries are treated by Neumann boundary conditions, to reflect the
 idea that if the domain was infinite, velocities would become
-constant. Incoming air is cold ($T = 0$), and outgoing air goes away
-at constant temperature ($T_{y} = 0$).
+established. Incoming air is cold ($T = 0$), and outgoing air goes away
+at established temperature ($T_{y} = 0$).
 
 Pressure conditions are more difficult to get right. For open
 boundaries, it is based on Bernoulli's theorem. This states that for
@@ -617,21 +628,7 @@ domain to be infinite, at infinity we would have $\vb{v} = 0$, $p =
   {v_{\text{infinity}}}}^{2} = 0$, so $p_{\text{inlet}} = - \frac 1 2
 {\vb v_{\text{inlet}}}^{2}$.
 
-Boundary conditions are summarised in table \ref{table:bc}. We examine
-three main variations on these.
-
-\begin{itemize}
-  \item We expect horizontal velocity to be zero at the bottom. To
-    ensure this, we can impose $U = 0$ instead of $U_{y} = 0$.
-  \item Separating incoming and outgoing fluid seems artificial. Some
-    authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
-    not $V > 0$.
-  \item We may also assume pressure to be constant at the
-    inlet. Applying Bernoulli's theorem this time on a current tube,
-    we get $p = - \frac 1 2 V_{\text{mean}}^{2}$.
-\end{itemize}
-
-
+Boundary conditions are summarised in table \ref{table:bc}.
 \begin{table}[!h]
   \centering
   \begin{tabular}{|l|c|c|c|c|}
@@ -649,6 +646,20 @@ three main variations on these.
   \caption{Boundary conditions for the chimney problem.}
   \label{table:bc}
 \end{table}
+
+We examine three main variations on these.
+
+\begin{itemize}
+  \item We expect horizontal velocity to be zero at the bottom. To
+    ensure this, we can impose $U = 0$ instead of $U_{y} = 0$.
+  \item Separating incoming and outgoing fluid seems artificial. Some
+    authors just use $P = 0$ and $T_{y} = 0$ for the outlet whether or
+    not $V > 0$.
+  \item We may also assume pressure to be constant at the
+    inlet. Applying Bernoulli's theorem this time on a current tube,
+    we get $p = - \frac 1 2 V_{\text{mean}}^{2}$.
+\end{itemize}
+
 
 
 The effect of these boundary conditions will be examined section
@@ -694,16 +705,17 @@ Newton method, gave the same result.
 
 \section{Numerical experiments}
 \subsection{Methodology}
-We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$. Unless specified
-otherwise, boundary conditions are those of table \ref{table:bc}, and
-the solver is stationary. The meshing is rectangular, with smaller
-cells around zones of interest, i.e. $y = 0$, $x = 2.5$ and $x =
-7.5$. The default grid is 50x300. Clusters are groups of 2x2 cells,
-with $\lambda = 10^{-5}$. The linear solver uses an iterative
-bi-conjugate gradient algorithm with 5 levels of incomplete LU (ILU)
-preconditioning, except for some problems which require a direct
-solver (see section \ref{sec:stab}). The method was implemented in
-FORTRAN by E. Ch\'enier.
+We fix $A = 10$, $Ra = 10^{5}$, $Pr = 0.71$. This corresponds to air,
+and a fixed heating. Unless specified otherwise, boundary conditions
+are those of table \ref{table:bc}, and the solver is stationary. The
+meshing is rectangular, with smaller cells around zones of interest,
+i.e. $x = 0$, $y = 2.5$ and $y = 7.5$. The default grid is
+50x300. Clusters are groups of 2x2 cells, with $\lambda =
+10^{-5}$. The linear solver uses an iterative bi-conjugate gradient
+algorithm with 5 levels of incomplete LU (ILU) preconditioning, except
+for some problems which require a direct solver (see section
+\ref{sec:stab}). The method was implemented in FORTRAN by
+E. Ch\'enier.
 \subsection{Convergence}
 \subsubsection{Newton convergence}
 \label{sec:conv_newton}
@@ -921,7 +933,8 @@ TODO
 \centering
 \includegraphics[width=0.6\textwidth]{figs/LB-0-0-u-bas}
 \caption{Level sets of horizontal velocity $U$ at the inlet using
-  $U_{y} = 0$ and local Bernoulli, showing an aspiration.}
+  $U_{y} = 0$ and local Bernoulli, showing an aspiration. We have
+  $U_{\text{max}} = 20$}.
 \label{fig:LB-0-0-u-bas}
 \end{figure}
 
