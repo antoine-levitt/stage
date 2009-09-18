@@ -55,7 +55,7 @@ methods :
 \begin{itemize}
 \item {\bf Finite difference method} approximates fields by their
   values on points, and approximates derivatives. This, while the
-  simplest of all methods, generally yields poor accuracy.
+  simplest of all methods, does not adapt to meshings other rectangulary .
 
 \item {\bf Finite element method} convert the PDE into an equivalent
   variational form, then approximate the infinite-dimensional solution
@@ -849,20 +849,20 @@ three variations we describe.
   \label{table:debits}
 \end{table}
 
-% \begin{table}[!h]
-%   \centering
-%   \begin{tabular}{|l|c|c|c|c|}
-%     \hline
-%     & LB Bench & LB Lequere & GB Bench & GB Lequere \\
-%     \hline
-%     Recirculation size  & 0.72 & 0.71 & 0.66 & 0.78 \\
-%     Point where $V = 0$ & 0.47 & 0.44 & 0.52 & 0.50 \\
-%     \hline
-%   \end{tabular}
-%   \caption{Recirculation sizes ($\pm 0.02$) and point where $V = 0$ at
-%     the outlet for different boundary conditions.}
-%   \label{table:recirculations}
-% \end{table}
+\begin{table}[!h]
+  \centering
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    & LB Bench & LB Lequere & GB Bench & GB Lequere \\
+    \hline
+    Recirculation size  & 0.72 & 0.71 & 0.66 & 0.78 \\
+    Point where $V = 0$ & 0.47 & 0.44 & 0.52 & 0.50 \\
+    \hline
+  \end{tabular}
+  \caption{Recirculation sizes ($\pm 0.02$) and point where $V = 0$ at
+    the outlet for different boundary conditions.}
+  \label{table:recirculations}
+\end{table}
 
 
 First of all, the results are sensibly equal when $U = 0$ and when
@@ -902,7 +902,14 @@ Discriminating fluid at the outlet mainly changes the size of the
 recirculation, which explains the bumps near the outlet seen in the
 profiles.
 \section{Conclusion}
-TODO
+The Boussinesq approximation, combined with the numerical method
+presented, gives a way to simulate air flow inside our chimney. The
+only modelisation problem concerns boundary conditions at the inlet
+and outlet. While our boundary conditions give acceptable results,
+simulation of neighbouring air give rise to criticism of our
+hypothesis. In particular, while our model uses cold air for the
+recirculation, thermic diffusion above the chimney makes incoming air
+hotter, and our model should take this into account.
 
 \listoffigures
 \listoftables
