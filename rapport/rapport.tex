@@ -17,8 +17,12 @@
 \newtheorem{definition}{Definition}
 
 \begin{document}
-\author{Antoine Levitt}
-\title{Finite volume method for incompressible Navier-Stokes equations}
+\author{Antoine Levitt\\Stage de deuxi\`eme ann\'ee
+  ENSIMAG\\Laboratoire MSME, Universit\'e de
+  Marne-La-Vall\'ee\\Encadr\'e par Robert Eymard et \'Eric
+  Ch\'enier\\D\'ebut juillet-mi ao\`ut}
+\title{Finite volume method for incompressible Navier-Stokes
+  equations, application to a benchmark problem}
 \maketitle
 \abstract{
   In this project we study numerical methods to numerically approximate
@@ -32,6 +36,23 @@ obtained.}
 \newpage
 \tableofcontents
 \newpage
+
+\section{Context of the internship}
+%PERSONNEL
+This internship was completed in the laboratory MSME (Modélisation et
+Simulation Multi-Échelles), team TCM (Transport de Chaleur et de
+Matière). I was supervised by Robert Eymard (a mathematician) and Éric
+Chénier (a physicist). The main objective of the work was to
+understand the results of a benchmark which was done in 2007, and gave
+a wide variety of results. To understand these, I used the FORTRAN
+code developped by Éric Chénier.
+
+The main difficulties in the project were to understand the physical
+context (Boussinesq approximation), the numerical method (a finite
+volume scheme which uses non-standard approximations of fluxes to
+ensure certain properties), the implementation (6000 lines of
+FORTRAN). Once this was done, the interpretation of results was quite
+straightforward.
 
 \section{Introduction}
 The Navier-Stokes equations, discovered in the 19th century, are a
@@ -910,6 +931,12 @@ simulation of neighbouring air give rise to criticism of our
 hypothesis. In particular, while our model uses cold air for the
 recirculation, thermic diffusion above the chimney makes incoming air
 hotter, and our model should take this into account.
+
+% PERSONNEL
+From a personal point of view, this internship was the occasion for me
+to learn things from a variety of domains : fluid mechanics, finite
+volume method, and FORTRAN. I also gained a broader perspective
+on numerical methods for fluid mechanics problems.
 
 \listoffigures
 \listoftables
